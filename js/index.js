@@ -36,9 +36,7 @@
         toast.t = setTimeout(function () { el.classList.remove("show") }, 3200);
     }
 
-    /* ==========================================
-       DATOS INICIALES
-       ========================================== */
+
     var data = [
         { id: 1, t: "Plásticos y PET", s: "p", sev: "Media", lat: -12.0560, lng: -77.0840, addr: "Av. San Marcos, Gonzales", eta: "Pendiente de asignación", when: "Justo ahora", conf: 90.7 },
         { id: 2, t: "Foco infeccioso", s: "c", sev: "Alta", lat: -12.0930, lng: -77.0300, addr: "Jr. Los Cedros, San Isidro", eta: "Cuadrilla en camino (2 h)", when: "Hace 12 min", conf: 94.2 },
@@ -65,9 +63,7 @@
         });
     } catch (e) {}
 
-    /* ==========================================
-       CONFIGURACIÓN DE MAPAS (Leaflet)
-       ========================================== */
+
     var TILES = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", ATTR = "&copy; OpenStreetMap contributors";
     
     function mk(id, opts) {
@@ -106,7 +102,6 @@
         selected = id;
         var d = data.find(function (x) { return x.id === id });
 
-        // Determinar si hay imagen subida por el usuario o si se muestra la caja con el emoji de la IA
         var phContent = d.photo 
             ? '<img src="' + d.photo + '" style="width:100%;height:100%;object-fit:cover;border-radius:12px;" alt="Foto del reporte">' 
             : ICON[d.t];
@@ -151,9 +146,6 @@
     draw();
     select(1);
 
-    /* ==========================================
-       ANIMACIÓN DE CONTADORES (IntersectionObserver)
-       ========================================== */
     var io = new IntersectionObserver(function (es) {
         es.forEach(function (e) {
             if (!e.isIntersecting) return;

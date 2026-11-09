@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GreenAlert — Ciudades más limpias, comunidades más fuertes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+<header><div class="wrap nav">
+ <a href="#top" class="logo"><svg width="30" height="30" viewBox="0 0 32 32" fill="none"><path d="M16 3c6 4 10 8 10 14a10 10 0 0 1-20 0c0-6 4-10 10-14z" fill="#157a46"/><path d="M16 9v15M16 17l5-4M16 20l-5-4" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>GreenAlert</a>
+ <ul id="menu"><li><a href="#como">Cómo funciona</a></li><li><a href="#tecnologia">Tecnología</a></li><li><a href="#mapa">Mapa</a></li><li><a href="#comunidad">Comunidad</a></li><li><a href="#mision">Misión</a></li></ul>
+ <div style="display:flex;gap:10px;align-items:center"><div class="um"><button class="btn" id="authBtn" aria-haspopup="menu" aria-expanded="false">Iniciar sesión</button><div class="umenu" id="uMenu" role="menu" hidden><button role="menuitem" id="miReport">Generar reporte</button><button role="menuitem" id="miMine">Ver mis reportes</button><button role="menuitem" id="miOut">Cerrar sesión</button></div></div><button class="burger" id="burger" aria-label="Menú">☰</button></div>
+</div></header>
+
+<main id="top">
+<div class="wrap hero">
+ <div>
+  <span class="chip"><i></i>Mapa ciudadano en vivo</span>
+  <h1 style="margin-top:18px">Ciudades más limpias, comunidades más fuertes</h1>
+  <p>Toma una foto del punto de contaminación. Nuestra IA lo clasifica y tu municipalidad lo ve en el mapa.</p>
+  <div class="acts"><button class="btn p" data-report>Reportar problema ambiental →</button><a class="btn" href="#mapa">Ver mapa</a></div>
+ </div>
+ <div class="mapbox">
+  <div id="heroMap"></div>
+  <div class="live"><small>NUEVO REPORTE · JUSTO AHORA</small><b>Plásticos y PET en Av. San Marcos</b><span class="tag">Severidad media</span><div class="bar"><span></span></div><small>Confianza de la IA: 90.7%</small></div>
+  <div class="legend"><span><i style="background:var(--red)"></i>Crítico</span><span><i style="background:var(--yel)"></i>En proceso</span><span><i style="background:var(--ok)"></i>Atendido</span></div>
+ </div>
+</div>
+
+<div class="stats"><div class="wrap">
+ <div><div class="num" data-n="1500" data-p="+">0</div><div class="lab">reportes realizados</div></div>
+ <div><div class="num" data-n="15" data-p="+">0</div><div class="lab">zonas monitoreadas</div></div>
+ <div><div class="num" data-n="68" data-s="%">0</div><div class="lab">menos tiempo de respuesta</div></div>
+</div></div>
+
+<section id="como"><div class="wrap">
+ <span class="chip">Simple, transparente, efectivo</span>
+ <h2>Cuatro pasos, de tu celular a la calle limpia</h2>
+ <div class="steps">
+  <div class="card"><div class="ic">1</div><h3>Reporta</h3><p>Toma una foto en segundos. Tu ubicación se agrega sola.</p></div>
+  <div class="card"><div class="ic">2</div><h3>Verificamos</h3><p>La IA identifica el tipo de residuo y su gravedad.</p></div>
+  <div class="card"><div class="ic">3</div><h3>Publicamos</h3><p>El punto aparece en el mapa público para todos.</p></div>
+  <div class="card"><div class="ic">4</div><h3>Genera cambio</h3><p>La municipalidad prioriza y tú sigues el avance.</p></div>
+ </div>
+</div></section>
+
+<div class="band"><div class="wrap">
+ <div><div class="num" data-n="1500" data-p="+">0</div><div class="lab">Reportes realizados</div></div>
+ <div><div class="num" data-n="12650">0</div><div class="lab">Kilos de basura recogidos</div></div>
+ <div><div class="num" data-n="24" data-s="%">0</div><div class="lab">Contaminación disminuida</div></div>
+ <div><div class="num" data-n="15" data-p="+">0</div><div class="lab">Zonas monitoreadas</div></div>
+</div></div>
+
+<section id="comunidad"><div class="wrap">
+ <span class="chip">Impacto compartido</span>
+ <h2>Un mismo mapa, dos formas de ganar</h2>
+ <div class="two">
+  <div class="card"><div class="ic">👥</div><h3>Para vecinos: transparencia que presiona</h3><p class="sub" style="font-size:.88rem">Consulta cuánto tarda tu municipalidad en resolver cada alerta. Los registros son abiertos e inmutables.</p><hr><div class="ok">✓ Seguimiento desde el reporte hasta el recojo</div></div>
+  <div class="card"><div class="ic">🏛️</div><h3>Para municipalidades: decisiones con datos</h3><p class="sub" style="font-size:.88rem">Optimiza rutas de camiones, prioriza lixiviados y emergencias sanitarias, y reduce horas ociosas de cuadrillas.</p><hr><div class="ok">↘ Hasta 35% menos gasto logístico de saneamiento</div></div>
+ </div>
+</div></section>
+
+<section id="tecnologia" class="tech"><div class="wrap">
+ <span class="chip">Tecnología cívica de precisión</span>
+ <h2>Inteligencia artificial para un ecosistema limpio</h2>
+ <p class="sub">Una red neuronal clasifica el tipo de residuo, el volumen estimado y la prioridad higiénica, y reduce el tiempo de respuesta hasta en un 68%.</p>
+ <div class="steps">
+  <div class="card"><div class="ic">♻</div><h3>Plásticos y PET</h3><p>Estima el volumen de botellas y polímeros.</p></div>
+  <div class="card"><div class="ic">🍂</div><h3>Orgánicos</h3><p>Alerta por descomposición y emisión biológica.</p></div>
+  <div class="card"><div class="ic">🧱</div><h3>Escombros</h3><p>Calcula peso y maquinaria pesada requerida.</p></div>
+  <div class="card"><div class="ic">⚠</div><h3>Foco infeccioso</h3><p>Detecta plagas y vectores de transmisión.</p></div>
+ </div>
+</div></section>
+
+<section id="mapa"><div class="wrap">
+ <div class="xhead">
+  <div><span class="chip">Telemetría en vivo</span><h2>Explorador de incidencias</h2><p class="sub">Elige un punto del mapa para ver su detalle y severidad.</p></div>
+  <div class="tabs" id="tabs"><button class="on" data-f="all">Todos</button><button data-f="c">Crítico</button><button data-f="p">En proceso</button><button data-f="a">Atendido</button></div>
+ </div>
+ <div class="xgrid">
+  <div id="bigMap"></div>
+  <aside class="panel" id="panel"></aside>
+ </div>
+</div></section>
+
+<section id="mision" style="padding-top:20px"><div class="wrap">
+ <div class="two" style="margin-top:0">
+  <div class="card"><span class="chip">Nuestra misión</span><h3 style="font-size:1.4rem;color:var(--g9)">Empoderamiento cívico y eficiencia municipal</h3><p class="sub" style="font-size:.88rem">Damos a los ciudadanos una herramienta móvil para reportar puntos críticos con geolocalización, para que las municipalidades prioricen con transparencia.</p></div>
+  <div class="card"><span class="chip">Meta 2027</span><h3 style="font-size:1.4rem;color:var(--g9)">Liderazgo nacional y expansión sostenible</h3><p class="sub" style="font-size:.88rem">Queremos ser la plataforma referente del país en soluciones digitales sostenibles y llevar el impacto medible en carbono neutralidad a nivel internacional.</p></div>
+ </div>
+ <h2 style="margin-top:70px">Lo que dicen quienes ya reportan</h2>
+ <div class="quotes">
+  <div class="card"><p>“Antes mandaba fotos por WhatsApp y nadie respondía. Ahora veo en el mapa cuándo recogen lo que reporté.”</p><div class="who"><i>V</i><div><b>Valeria, vecina</b><br><span style="color:var(--mut)">Centro histórico</span></div></div></div>
+  <div class="card d"><p>“Con las alertas clasificadas por gravedad armamos las rutas del día en minutos, no en horas.”</p><div class="who"><i>M</i><div><b>Marco, gestión de limpieza</b><br>Municipalidad distrital</div></div></div>
+  <div class="card"><p>“Los reportes quedan a la vista de todos. Eso cambió la conversación con la municipalidad.”</p><div class="who"><i>C</i><div><b>Camila, voluntaria</b><br><span style="color:var(--mut)">Colectivo vecinal</span></div></div></div>
+ </div>
+</div></section>
+
+<div class="wrap" style="padding-bottom:70px"><div class="cta">
+ <div><span class="chip" style="background:#1c6b45;color:#b7f0d0">Tu calle también cuenta</span><h2 style="margin-top:16px">¿Ves un punto de contaminación en tu calle?</h2><p>No lo dejes pasar. Con GreenAlert, tu cámara activa un informe clasificado que llega de inmediato a la central municipal correspondiente.</p>
+ <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn w" data-report>Iniciar nuevo reporte ahora</button><button class="btn" id="ctaMine">Ver mis reportes</button></div></div>
+ <svg width="170" height="150" viewBox="0 0 170 150" fill="none" stroke="#2f7a55" stroke-width="7" stroke-linejoin="round" aria-hidden="true"><path d="M8 28l50-18 54 18 50-18v112l-50 18-54-18-50 18z"/><path d="M58 10v112M112 28v112"/></svg>
+</div></div>
+</main>
+
+<footer><div class="wrap"><a href="#top" class="logo" style="font-size:1rem">GreenAlert</a><span>© 2026 GreenAlert. Ciudades limpias con tecnología cívica.</span></div></footer>
+
+<!-- modals -->
+<div class="ov" id="authOv"><div class="modal" role="dialog" aria-modal="true">
+ <button class="x" data-close aria-label="Cerrar">×</button>
+ <h3 id="authTitle">Iniciar sesión</h3><p class="sub" id="authSub" style="font-size:.85rem">Accede para reportar y seguir tus incidencias.</p>
+ <div id="nameWrap" hidden><label for="aName">Nombre</label><input id="aName" autocomplete="name"></div>
+ <label for="aMail">Correo</label><input id="aMail" type="email" autocomplete="email">
+ <label for="aPass">Contraseña</label><input id="aPass" type="password" autocomplete="current-password">
+ <div class="err" id="authErr" role="alert"></div>
+ <button class="btn p" id="authGo" style="width:100%;justify-content:center;margin-top:8px">Entrar</button>
+ <div class="sw"><span id="swTxt">¿No tienes cuenta?</span> <button id="swBtn">Regístrate</button></div>
+</div></div>
+
+<div class="ov" id="repOv"><div class="modal" role="dialog" aria-modal="true" style="max-width:520px">
+ <button class="x" data-close aria-label="Cerrar">×</button>
+ <h3>Reportar problema ambiental</h3><p class="sub" style="font-size:.85rem">Sube una foto, marca el punto en el mapa y enviamos el reporte.</p>
+ <label for="rType">Tipo de residuo</label>
+ <select id="rType"><option>Plásticos y PET</option><option>Orgánicos</option><option>Escombros</option><option>Foco infeccioso</option></select>
+ <label for="rDesc">Descripción</label><textarea id="rDesc" placeholder="Ej. Bolsas acumuladas junto al parque"></textarea>
+ <label for="rPhoto">Foto</label><input id="rPhoto" type="file" accept="image/*" capture="environment">
+ <label>Ubicación</label>
+ <button class="btn" id="locBtn" type="button" style="padding:8px 14px;font-size:.82rem">Usar mi ubicación</button>
+ <div id="pickMap"></div><div class="hint" id="rHint">Toca el mapa para marcar el punto exacto.</div>
+ <div class="err" id="repErr" role="alert"></div>
+ <button class="btn p" id="repGo" style="width:100%;justify-content:center;margin-top:8px">Enviar reporte</button>
+</div></div>
+<div class="ov" id="mineOv"><div class="modal" role="dialog" aria-modal="true">
+ <button class="x" data-close aria-label="Cerrar">×</button>
+ <h3>Mis reportes</h3><p class="sub" style="font-size:.85rem">Toca un reporte para verlo en el mapa.</p>
+ <div id="mineList"></div>
+</div></div>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="js/index.js"></script>
+</body>
+</html>

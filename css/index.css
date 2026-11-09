@@ -163,6 +163,12 @@ h2 {
     color: var(--g9);
 }
 
+.logo img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
 .nav ul {
     display: flex;
     gap: 30px;

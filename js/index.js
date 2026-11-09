@@ -36,7 +36,9 @@
         toast.t = setTimeout(function () { el.classList.remove("show") }, 3200);
     }
 
-
+    /* ==========================================
+       DATOS INICIALES
+       ========================================== */
     var data = [
         { id: 1, t: "Plásticos y PET", s: "p", sev: "Media", lat: -12.0560, lng: -77.0840, addr: "Av. San Marcos, Gonzales", eta: "Pendiente de asignación", when: "Justo ahora", conf: 90.7 },
         { id: 2, t: "Foco infeccioso", s: "c", sev: "Alta", lat: -12.0930, lng: -77.0300, addr: "Jr. Los Cedros, San Isidro", eta: "Cuadrilla en camino (2 h)", when: "Hace 12 min", conf: 94.2 },
@@ -63,7 +65,9 @@
         });
     } catch (e) {}
 
-    // CONFIGURACIÓN DE MAPAS (Leaflet)
+    /* ==========================================
+       CONFIGURACIÓN DE MAPAS (Leaflet)
+       ========================================== */
     var TILES = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", ATTR = "&copy; OpenStreetMap contributors";
     
     function mk(id, opts) {
@@ -101,12 +105,20 @@
     function select(id) {
         selected = id;
         var d = data.find(function (x) { return x.id === id });
-        $("#panel").innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center"><span class="tag ' + d.s + '">' + ST[d.s] + '</span><small style="color:var(--mut)">' + esc(d.when) + '</small></div>' +
+
+        // Determinar si hay imagen subida por el usuario o si se muestra la caja con el emoji de la IA
+        var phContent = d.photo 
+            ? '<img src="' + d.photo + '" style="width:100%;height:100%;object-fit:cover;border-radius:12px;" alt="Foto del reporte">' 
+            : ICON[d.t];
+
+       $("#panel").innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center"><span class="tag ' + d.s + '">' + ST[d.s] + '</span><small style="color:var(--mut)">' + esc(d.when) + '</small></div>' +
             '<h3>' + esc(d.t) + ' en ' + esc(d.addr.split(",")[0]) + '</h3><small style="color:var(--mut)">' + esc(d.addr) + '</small>' +
-            '<div class="ph"><em>IA ' + d.conf.toFixed(1) + '%</em>' + ICON[d.t] + '</div>' +
-            '<div class="row"><span>Clasificación</span><b>' + esc(d.t) + '</b></div><div class="row"><span>Nivel de severidad</span><b>' + esc(d.sev) + '</b></div><div class="row"><span>Tiempo estimado de recojo</span><b>' + esc(d.eta) + '</b></div>' +
-            '<button class="btn p" id="confirmBtn" style="justify-content:center">Confirmar y apoyar reporte</button>' +
-            '<button class="btn" id="shareBtn" style="justify-content:center">Compartir con la cuadrilla municipal</button>';
+            '<div class="ph" style="overflow:hidden;">' + phContent + '</div>' +
+            '<div class="row"><span>Clasificación: </span><b>' + esc(d.t) + '</b></div><div class="row"><span>Nivel de severidad: </span><b>' + esc(d.sev) + '</b></div><div class="row"><span>Tiempo estimado de recojo: </span><b>' + esc(d.eta) + '</b></div>' +
+            '<div style="display:flex; flex-direction:column; gap:10px; margin-top: 4px;">' +
+                '<button class="btn p" id="confirmBtn" style="justify-content:center">Confirmar y apoyar reporte</button>' +
+                '<button class="btn" id="shareBtn" style="justify-content:center">Compartir con la cuadrilla municipal</button>' +
+            '</div>';
 
         $("#confirmBtn").onclick = function () {
             if (!session()) { openAuth("login", "Inicia sesión para confirmar reportes."); return }
@@ -139,7 +151,9 @@
     draw();
     select(1);
 
-    // ANIMACIÓN DE CONTADORES (IntersectionObserver)
+    /* ==========================================
+       ANIMACIÓN DE CONTADORES (IntersectionObserver)
+       ========================================== */
     var io = new IntersectionObserver(function (es) {
         es.forEach(function (e) {
             if (!e.isIntersecting) return;
@@ -155,10 +169,15 @@
 
     $$(".num[data-n]").forEach(function (el) { io.observe(el) });
 
+    /* ==========================================
+       NAVEGACIÓN MÓVIL (Menú Responsive)
+       ========================================== */
     $("#burger").onclick = function () { $("#menu").classList.toggle("open") };
     $$("#menu a").forEach(function (a) { a.onclick = function () { $("#menu").classList.remove("open") } });
 
-    // MODALES Y AUTENTICACIÓN
+    /* ==========================================
+       MODALES Y AUTENTICACIÓN
+       ========================================== */
     function openModal(id) { $(id).classList.add("show") }
     function closeAll() { $$(".ov").forEach(function (o) { o.classList.remove("show") }) }
 
@@ -254,7 +273,9 @@
     };
     refreshAuth();
 
-    // GESTIÓN DE REPORTES
+    /* ==========================================
+       GESTIÓN DE REPORTES Y PROCESAMIENTO DE IMAGEN
+       ========================================== */
     var pick = null, pickMarker = null, pt = null;
 
     function openReport() {
@@ -295,29 +316,50 @@
         );
     };
 
-    $("#repGo").onclick = function () {
-        if (!pt) { $("#repErr").textContent = "Marca la ubicación en el mapa antes de enviar."; return }
+    function saveAndRenderReport(photoDataUrl) {
         var t = $("#rType").value, desc = $("#rDesc").value.trim();
         var d = {
             id: nextId++, t: t, s: t === "Foco infeccioso" ? "c" : "p", sev: t === "Foco infeccioso" ? "Alta" : "Media",
             lat: pt.lat, lng: pt.lng, addr: desc || "Reporte ciudadano", eta: "Pendiente de asignación",
-            when: "Justo ahora", conf: +(88 + Math.random() * 7).toFixed(1)
+            when: "Justo ahora", conf: +(88 + Math.random() * 7).toFixed(1),
+            photo: photoDataUrl || null
         };
         d.owner = session().mail;
         d.ts = Date.now();
         data.push(d);
+
+        // Guardar reportes creados por usuarios
         store.set("ga_reports", JSON.stringify(data.filter(function (x) { return x.owner })));
+        
         filter = "all";
         $$("#tabs button").forEach(function (x) { x.classList.toggle("on", x.dataset.f === "all") });
         closeAll();
+        
+        // Limpiar campos del formulario
         $("#rDesc").value = "";
         $("#rPhoto").value = "";
         pt = null;
         if (pickMarker) { pick.removeLayer(pickMarker); pickMarker = null }
+        
         draw();
         select(d.id);
         document.getElementById("mapa").scrollIntoView();
         toast("Reporte enviado y clasificado como " + t);
+    }
+
+    $("#repGo").onclick = function () {
+        if (!pt) { $("#repErr").textContent = "Marca la ubicación en el mapa antes de enviar."; return }
+        
+        var photoInput = $("#rPhoto");
+        if (photoInput.files && photoInput.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                saveAndRenderReport(e.target.result);
+            };
+            reader.readAsDataURL(photoInput.files[0]);
+        } else {
+            saveAndRenderReport(null);
+        }
     };
 
 })();

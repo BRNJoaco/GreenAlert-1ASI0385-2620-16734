@@ -10,7 +10,9 @@
     <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
-    <header>
+
+    <!-- Header y Navegación -->
+    <header class="header">
         <div class="wrap nav">
             <a href="#top" class="logo">
                 <svg width="30" height="30" viewBox="0 0 32 32" fill="none">
@@ -40,52 +42,52 @@
         </div>
     </header>
 
+    <!-- Main Content -->
     <main id="top">
-        <div class="wrap hero">
-            <div>
-                <span class="chip"><i></i>Mapa ciudadano en vivo</span>
-                <h1 style="margin-top:18px">Ciudades más limpias, comunidades más fuertes</h1>
-                <p>Toma una foto del punto de contaminación. Nuestra IA lo clasifica y tu municipalidad lo ve en el mapa.</p>
-                <div class="acts">
-                    <button class="btn p" data-report>Reportar problema ambiental →</button>
-                    <a class="btn" href="#mapa">Ver mapa</a>
-                </div>
-            </div>
-            <div class="mapbox">
-                <div id="heroMap"></div>
-                <div class="live">
-                    <small>NUEVO REPORTE · JUSTO AHORA</small>
-                    <b>Plásticos y PET en Av. San Marcos</b>
-                    <span class="tag">Severidad media</span>
-                    <div class="bar"><span></span></div>
-                    <small>Confianza de la IA: 90.7%</small>
-                </div>
-                <div class="legend">
-                    <span><i style="background:var(--red)"></i>Crítico</span>
-                    <span><i style="background:var(--yel)"></i>En proceso</span>
-                    <span><i style="background:var(--ok)"></i>Atendido</span>
-                </div>
-            </div>
-        </div>
 
+        <!-- Sección Hero -->
+        <section class="hero-section">
+            <div class="wrap hero">
+                <div class="hero-content">
+                    <span class="chip"><i></i>Mapa ciudadano en vivo</span>
+                    <h1 style="margin-top:18px">Ciudades más limpias, comunidades más fuertes</h1>
+                    <p>Toma una foto del punto de contaminación. Nuestra IA lo clasifica y tu municipalidad lo ve en el mapa.</p>
+                    <div class="acts">
+                        <button class="btn p" data-report>Reportar problema ambiental →</button>
+                        <a class="btn" href="#mapa">Ver mapa</a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <div class="mapbox">
+                        <div id="heroMap"></div>
+                        <div class="live">
+                            <small>NUEVO REPORTE · JUSTO AHORA</small>
+                            <b>Plásticos y PET en Av. San Marcos</b>
+                            <span class="tag">Severidad media</span>
+                            <div class="bar"><span></span></div>
+                            <small>Confianza de la IA: 90.7%</small>
+                        </div>
+                        <div class="legend">
+                            <span><i style="background:var(--red)"></i>Crítico</span>
+                            <span><i style="background:var(--yel)"></i>En proceso</span>
+                            <span><i style="background:var(--ok)"></i>Atendido</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección Estadísticas -->
         <div class="stats">
             <div class="wrap">
-                <div>
-                    <div class="num" data-n="1500" data-p="+">0</div>
-                    <div class="lab">reportes realizados</div>
-                </div>
-                <div>
-                    <div class="num" data-n="15" data-p="+">0</div>
-                    <div class="lab">zonas monitoreadas</div>
-                </div>
-                <div>
-                    <div class="num" data-n="68" data-s="%">0</div>
-                    <div class="lab">menos tiempo de respuesta</div>
-                </div>
+                <div><div class="num" data-n="1500" data-p="+">0</div><div class="lab">reportes realizados</div></div>
+                <div><div class="num" data-n="15" data-p="+">0</div><div class="lab">zonas monitoreadas</div></div>
+                <div><div class="num" data-n="68" data-s="%">0</div><div class="lab">menos tiempo de respuesta</div></div>
             </div>
         </div>
 
-        <section id="como">
+        <!-- Sección Cómo Funciona -->
+        <section class="section" id="como">
             <div class="wrap">
                 <span class="chip">Simple, transparente, efectivo</span>
                 <h2>Cuatro pasos, de tu celular a la calle limpia</h2>
@@ -98,6 +100,7 @@
             </div>
         </section>
 
+        <!-- Banda de Impacto -->
         <div class="band">
             <div class="wrap">
                 <div><div class="num" data-n="1500" data-p="+">0</div><div class="lab">Reportes realizados</div></div>
@@ -107,7 +110,8 @@
             </div>
         </div>
 
-        <section id="comunidad">
+        <!-- Sección Comunidad -->
+        <section class="section" id="comunidad">
             <div class="wrap">
                 <span class="chip">Impacto compartido</span>
                 <h2>Un mismo mapa, dos formas de ganar</h2>
@@ -118,7 +122,8 @@
             </div>
         </section>
 
-        <section id="tecnologia" class="tech">
+        <!-- Sección Tecnología -->
+        <section class="section tech" id="tecnologia">
             <div class="wrap">
                 <span class="chip">Tecnología cívica de precisión</span>
                 <h2>Inteligencia artificial para un ecosistema limpio</h2>
@@ -132,7 +137,8 @@
             </div>
         </section>
 
-        <section id="mapa">
+        <!-- Sección Mapa / Explorador de Incidencias -->
+        <section class="section" id="mapa">
             <div class="wrap">
                 <div class="xhead">
                     <div><span class="chip">Telemetría en vivo</span><h2>Explorador de incidencias</h2><p class="sub">Elige un punto del mapa para ver su detalle y severidad.</p></div>
@@ -145,7 +151,8 @@
             </div>
         </section>
 
-        <section id="mision" style="padding-top:20px">
+        <!-- Sección Misión y Testimonios -->
+        <section class="section" id="mision" style="padding-top:20px">
             <div class="wrap">
                 <div class="two" style="margin-top:0">
                     <div class="card"><span class="chip">Nuestra misión</span><h3 style="font-size:1.4rem;color:var(--g9)">Empoderamiento cívico y eficiencia municipal</h3><p class="sub" style="font-size:.88rem">Damos a los ciudadanos una herramienta móvil para reportar puntos críticos con geolocalización, para que las municipalidades prioricen con transparencia.</p></div>
@@ -160,6 +167,7 @@
             </div>
         </section>
 
+        <!-- Sección CTA Final -->
         <div class="wrap" style="padding-bottom:70px">
             <div class="cta">
                 <div><span class="chip" style="background:#1c6b45;color:#b7f0d0">Tu calle también cuenta</span><h2 style="margin-top:16px">¿Ves un punto de contaminación en tu calle?</h2><p>No lo dejes pasar. Con GreenAlert, tu cámara activa un informe clasificado que llega de inmediato a la central municipal correspondiente.</p>
@@ -167,13 +175,15 @@
                 <svg width="170" height="150" viewBox="0 0 170 150" fill="none" stroke="#2f7a55" stroke-width="7" stroke-linejoin="round" aria-hidden="true"><path d="M8 28l50-18 54 18 50-18v112l-50 18-54-18-50 18z"/><path d="M58 10v112M112 28v112"/></svg>
             </div>
         </div>
+
     </main>
 
-    <footer>
+    <!-- Footer -->
+    <footer class="footer">
         <div class="wrap"><a href="#top" class="logo" style="font-size:1rem">GreenAlert</a><span>© 2026 GreenAlert. Ciudades limpias con tecnología cívica.</span></div>
     </footer>
 
-    <!-- Modals -->
+    <!-- Modales -->
     <div class="ov" id="authOv">
         <div class="modal" role="dialog" aria-modal="true">
             <button class="x" data-close aria-label="Cerrar">×</button>

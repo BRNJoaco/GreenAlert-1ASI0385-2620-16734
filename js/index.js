@@ -43,19 +43,31 @@
         }
     };
 
-    // Devuelve el objeto de usuarios registrados, indexado por correo.
+    // Devuelve el objeto de usuarios registrados, indexado por correo, convirtiendo el formato antiguo (name, pass) al nuevo (nombre, clave).
     function obtenerUsuarios() {
         try {
-            return JSON.parse(almacen.obtener("ga_users") || "{}");
+            const usuarios = JSON.parse(almacen.obtener("ga_users") || "{}");
+            Object.keys(usuarios).forEach(function (correo) {
+                const usuario = usuarios[correo];
+                usuarios[correo] = {
+                    nombre: usuario.nombre || usuario.name || "",
+                    clave: usuario.clave || usuario.pass || ""
+                };
+            });
+            return usuarios;
         } catch (error) {
             return {};
         }
     }
 
-    // Devuelve los datos de la sesión activa o null si no hay sesión iniciada.
+    // Devuelve los datos de la sesión activa (convirtiendo el formato antiguo) o null si no hay sesión válida.
     function obtenerSesion() {
         try {
-            return JSON.parse(almacen.obtener("ga_session") || "null");
+            const sesion = JSON.parse(almacen.obtener("ga_session") || "null");
+            if (!sesion) return null;
+            const correo = sesion.correo || sesion.mail;
+            const nombre = sesion.nombre || sesion.name;
+            return correo && nombre ? { correo: correo, nombre: nombre } : null;
         } catch (error) {
             return null;
         }
@@ -96,8 +108,30 @@
         return "Hace " + Math.round(minutos / 1440) + " días";
     }
 
+    // Convierte un reporte guardado con el formato antiguo (t, s, lat, lng...) al formato actual; devuelve null si no tiene coordenadas válidas.
+    function normalizarReporte(guardado) {
+        const reporte = {
+            id: guardado.id,
+            tipo: guardado.tipo || guardado.t,
+            estado: guardado.estado || guardado.s,
+            severidad: guardado.severidad || guardado.sev,
+            latitud: Number(guardado.latitud !== undefined ? guardado.latitud : guardado.lat),
+            longitud: Number(guardado.longitud !== undefined ? guardado.longitud : guardado.lng),
+            direccion: guardado.direccion || guardado.addr || "Reporte ciudadano",
+            tiempoEstimado: guardado.tiempoEstimado || guardado.eta || "Pendiente de asignación",
+            confianza: guardado.confianza || guardado.conf,
+            foto: guardado.foto || guardado.photo || null,
+            propietario: guardado.propietario || guardado.owner,
+            marcaTiempo: guardado.marcaTiempo || guardado.ts || Date.now()
+        };
+        const valido = isFinite(reporte.latitud) && isFinite(reporte.longitud) && colores[reporte.estado] && iconos[reporte.tipo];
+        return valido ? reporte : null;
+    }
+
     try {
-        JSON.parse(almacen.obtener("ga_reports") || "[]").forEach(function (reporte) {
+        JSON.parse(almacen.obtener("ga_reports") || "[]").forEach(function (guardado) {
+            const reporte = normalizarReporte(guardado);
+            if (!reporte) return;
             reporte.cuando = tiempoTranscurrido(reporte.marcaTiempo);
             reportes.push(reporte);
             siguienteId = Math.max(siguienteId, reporte.id + 1);

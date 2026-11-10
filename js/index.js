@@ -157,32 +157,113 @@
     });
 
     /* ==========================================
-       AUTENTICACIÓN Y MODALES
+       AUTENTICACIÓN Y MODALES (CORREGIDO)
        ========================================== */
-    function abrirModal(id) { $(id).classList.add("show"); }
-    function cerrarTodo() { $$(".ov").forEach(function (o) { o.classList.remove("show"); }); }
-    $$("[data-close]").forEach(function (b) { b.onclick = cerrarTodo; });
+    function abrirModal(id) { $(id).classList.add("show"); } function cerrarTodo() { $$(".ov").forEach(function (o) { o.classList.remove("show"); }); }
+
+    // Cerrar modales con botones, clic fuera o tecla Escape
+    $$("[data-close]").forEach(function (b) { b.onclick = cerrarTodo; }); $$
+(".ov").forEach(function (o) { o.addEventListener("mousedown", function (e) { if (e.target === o) cerrarTodo(); }); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") cerrarTodo(); });
 
     let modoAutenticacion = "login";
     
-    function abrirAutenticacion(m) {
-        modoAutenticacion = m || "login";
-        const reg = modoAutenticacion === "register";
+    // Función para alternar la UI entre Login y Registro
+    function establecerModoAuth(m) {
+        modoAutenticacion = m;
+        const reg = m === "register";
         $("#nameWrap").hidden = !reg;
         $("#authTitle").textContent = reg ? "Crear cuenta" : "Iniciar sesión";
-        abrirModal("#authOv");
+        $("#authGo").textContent = reg ? "Crear cuenta" : "Entrar";
+        
+        if ($("#swTxt")) $("#swTxt").textContent = reg ? "¿Ya tienes cuenta?" : "¿No tienes cuenta?";
+        if ($("#swBtn")) $("#swBtn").textContent = reg ? "Inicia sesión" : "Regístrate";
+        if ($("#authErr")) $("#authErr").textContent = "";
     }
 
+    // Función para abrir el modal de autenticación
+    function abrirAutenticacion(m, msg) {
+        establecerModoAuth(m || "login");
+        if (msg && $("#authSub")) $("#authSub").textContent = msg;
+        abrirModal("#authOv");
+        setTimeout(function () { $(modoAutenticacion === "register" ? "#aName" : "#aMail").focus(); }, 50);
+    }
+
+    // 1. EVENTO: Clic en el botón "Iniciar sesión" del Header principal
+    if ($("#authBtn")) {
+        $("#authBtn").onclick = function (e) {
+            e.stopPropagation();
+            const sesionActual = obtenerSesion();
+            if (sesionActual) {
+                // Despliega el submenú si el usuario ya está logueado
+                const menuUsuario = $("#uMenu");
+                if (menuUsuario) {
+                    menuUsuario.hidden = !menuUsuario.hidden;
+                    this.setAttribute("aria-expanded", String(!menuUsuario.hidden));
+                }
+            } else {
+                abrirAutenticacion("login", "Accede para reportar y seguir tus incidencias.");
+            }
+        };
+    }
+
+    // 2. EVENTO: Clic en "Regístrate" / "Inicia sesión" (texto pequeño dentro del modal)
+    if ($("#swBtn")) {
+        $("#swBtn").onclick = function () { 
+            establecerModoAuth(modoAutenticacion === "login" ? "register" : "login"); 
+        };
+    }
+
+    // 3. EVENTO: Clic en "Entrar" o "Crear cuenta" (procesar formulario)
     $("#authGo").onclick = function () {
-        const mail = $("#aMail").value.trim().toLowerCase(), pass = $("#aPass").value, name = $("#aName").value.trim(), u = obtenerUsuarios();
+        const mail = $("#aMail").value.trim().toLowerCase();
+        const pass = $("#aPass").value;
+        const name = $("#aName") ? $("#aName").value.trim() : "";
+        const err = $("#authErr");
+        const u = obtenerUsuarios();
+
+        if (err) err.textContent = "";
+
+        // Validaciones básicas
+        if (!/^\S+@\S+\.\S+$/.test(mail)) { if(err) err.textContent = "Escribe un correo válido."; return; }
+        if (pass.length < 6) { if(err) err.textContent = "La contraseña debe tener al menos 6 caracteres."; return; }
+        
         if (modoAutenticacion === "register") {
+            if (!name) { if(err) err.textContent = "Escribe tu nombre."; return; }
+            if (u[mail]) { if(err) err.textContent = "Ese correo ya está registrado. Inicia sesión."; return; }
+            // Codifica la contraseña en base64 de forma sencilla
             u[mail] = { name: name, pass: btoa(unescape(encodeURIComponent(pass))) };
             store.set("ga_users", JSON.stringify(u));
+        } else {
+            if (!u[mail] || u[mail].pass !== btoa(unescape(encodeURIComponent(pass)))) { 
+                if(err) err.textContent = "Correo o contraseña incorrectos."; 
+                return; 
+            }
         }
+        
+        // Guardar la sesión y actualizar la interfaz
         store.set("ga_session", JSON.stringify({ mail: mail, name: u[mail].name }));
+        refrescarEstadoAuth();
         cerrarTodo();
         mostrarToast("Hola, " + u[mail].name.split(" ")[0] + " 👋");
+        
+        // Ejecutar acción pendiente (ej. si intentó crear un reporte sin estar logueado)
+        if (abrirAutenticacion.after) { 
+            const f = abrirAutenticacion.after; 
+            abrirAutenticacion.after = null; 
+            f(); 
+        }
     };
+
+    // 4. EVENTO: Clic en "Cerrar sesión" en el menú desplegable
+    if ($("#miOut")) {
+        $("#miOut").onclick = function () { 
+            if ($("#uMenu")) $("#uMenu").hidden = true;
+            store.set("ga_session", "null"); 
+            refrescarEstadoAuth(); 
+            mostrarToast("Sesión cerrada"); 
+        };
+    }
 
     /* ==========================================
        GESTIÓN DE REPORTES CREADOS
